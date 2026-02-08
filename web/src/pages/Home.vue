@@ -27,37 +27,56 @@ export default defineComponent({
 </script>
 
 <template>
-  <div id="home" class="hero h-full bg-base-200">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">WhatsApp Contact Sync</h1>
-        <p class="py-6">
-          This app will sync your contact images from WhatsApp to Google
-          Contacts.
-          <br /><br />
-          To use this app, you will need to authorize access to your WhatsApp
-          account and to your Google account with contacts permissions.
-          <br /><br />
-          You can checkout the code and open new issues on the
-          <a
-            href="
-          https://github.com/guyzyl/whatsapp-contact-sync"
-            >GitHub repository</a
-          >.
-        </p>
-        <!-- Button is disabled until WS is connected to ensure the backed is serving before continuing. -->
-        <router-link
-          to="/contribute"
-          class="btn btn-primary"
-          :class="{ 'btn-disabled': !wsReady }"
-        >
-          {{
-            sessionStatus?.whatsappConnected || sessionStatus?.googleConnected
-              ? "Continue"
-              : "Get Started"
-          }}</router-link
-        >
+  <div class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="max-w-lg text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-base-100 shadow-sm border border-base-300 mb-6">
+        <img class="h-9 w-9" src="/logo.png" alt="Logo" />
       </div>
+
+      <h1 class="text-2xl font-semibold tracking-tight text-base-content">
+        PicSync
+      </h1>
+
+      <p class="mt-3 text-sm text-base-content/60 leading-relaxed max-w-sm mx-auto">
+        Sync your contact photos from WhatsApp to Google Contacts.
+        Authorize both accounts and let the app do the rest.
+      </p>
+
+      <div class="flex items-center justify-center gap-6 mt-6 text-xs text-base-content/40">
+        <div class="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          Secure
+        </div>
+        <div class="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+          </svg>
+          Open Source
+        </div>
+        <div class="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          ~2 min
+        </div>
+      </div>
+
+      <router-link
+        to="/contribute"
+        class="btn btn-primary btn-wide mt-8 gap-2"
+        :class="{ 'btn-disabled': !wsReady }"
+      >
+        {{
+          sessionStatus?.whatsappConnected || sessionStatus?.googleConnected
+            ? "Continue"
+            : "Get Started"
+        }}
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </router-link>
     </div>
   </div>
 </template>

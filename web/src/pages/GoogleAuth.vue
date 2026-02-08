@@ -6,18 +6,32 @@ import { event } from "vue-gtag";
 
 export default defineComponent({
   data: () => ({
-    CLIENT_ID: "436316840541-2o1496o38gjv2udalq8tg32rao3ehdlv",
-    API_KEY: "AIzaSyAy5TqbYpjFKzZq-ho-hS3aLkfVnAw9iBg",
+    CLIENT_ID: "",
+    API_KEY: "",
     gisLoaded: false,
     gapiLoaded: false,
+    configLoaded: false,
     tokenClient: undefined as any, // Another Google typing workaround
   }),
   mounted() {
-    this.addJSSrc("https://accounts.google.com/gsi/client", this.onGisLoaded);
-    this.addJSSrc("https://apis.google.com/js/api.js", this.onGapiLoaded);
+    this.loadConfig();
+    this.addJSSrc("https://accounts.google.com/gsi/client", () => { this.gisLoaded = true; this.tryInit(); });
+    this.addJSSrc("https://apis.google.com/js/api.js", () => { this.gapiLoaded = true; this.tryInit(); });
   },
   methods: {
     // Most code here is based on https://developers.google.com/people/quickstart/js
+    async loadConfig() {
+      const res = await fetch("/api/config", { credentials: "include" });
+      const data = await res.json();
+      this.CLIENT_ID = data.clientId;
+      this.API_KEY = data.apiKey;
+      this.configLoaded = true;
+      this.tryInit();
+    },
+    tryInit() {
+      if (this.configLoaded && this.gisLoaded) this.initGis();
+      if (this.configLoaded && this.gapiLoaded) this.initGapi();
+    },
     addJSSrc(url: string, onLoad: () => void = () => {}) {
       const authScriptElement = document.createElement("script");
       authScriptElement.src = url;
@@ -28,17 +42,15 @@ export default defineComponent({
       authScriptElement.setAttribute("defer", "");
       document.head.appendChild(authScriptElement);
     },
-    onGisLoaded() {
+    initGis() {
       this.tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: this.CLIENT_ID,
         scope: "https://www.googleapis.com/auth/contacts",
         callback: this.onSignIn,
       });
-      this.gisLoaded = true;
     },
-    async onGapiLoaded() {
+    initGapi() {
       gapi.load("client", this.initGapiClient);
-      this.gapiLoaded = true;
     },
     async initGapiClient() {
       await gapi.client.init({
@@ -79,26 +91,29 @@ export default defineComponent({
 </script>
 
 <template>
-  <div id="home" class="hero h-full bg-base-200">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">Authorize Google</h1>
-        <p class="py-6">
-          Connect your Google account and authorize contact permissions.
-          <br />
-        </p>
-        <div>
-          <button
-            @click="handleAuthClick"
-            :disabled="!gapiLoaded && !gisLoaded"
-            id="signin-button"
-            class="btn btn-outline btn-primary gap-4"
-          >
-            <img class="w-8" alt="Google login" src="/google_logo.svg" />
-            Sign in with Google
-          </button>
-        </div>
+  <div class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="max-w-lg w-full bg-base-100 rounded-xl shadow-sm border border-base-300 p-6">
+      <h1 class="text-2xl font-semibold tracking-tight text-base-content">
+        Authorize Google
+      </h1>
+      <p class="mt-2 text-sm text-base-content/60 leading-relaxed">
+        Connect your Google account to allow syncing contact photos.
+        We only request access to your contacts.
+      </p>
+      <div class="mt-6">
+        <button
+          @click="handleAuthClick"
+          :disabled="!configLoaded || !gapiLoaded || !gisLoaded"
+          id="signin-button"
+          class="btn btn-outline border-base-300 gap-3 w-full"
+        >
+          <img class="w-5" alt="Google login" src="/google_logo.svg" />
+          Sign in with Google
+        </button>
       </div>
+      <p class="mt-4 text-xs text-base-content/40 text-center">
+        Your credentials are never stored on our servers.
+      </p>
     </div>
   </div>
 </template>

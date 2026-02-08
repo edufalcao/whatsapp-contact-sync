@@ -23,10 +23,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
-    <Header></Header>
-    <router-view></router-view>
-    <Footer></Footer>
+  <div class="flex flex-col min-h-screen bg-base-200">
+    <Header />
+    <router-view v-slot="{ Component }">
+      <Transition name="page" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </router-view>
+    <Footer />
   </div>
 </template>
 

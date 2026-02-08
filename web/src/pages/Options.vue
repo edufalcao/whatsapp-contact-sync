@@ -21,14 +21,14 @@ export default defineComponent({
     options: [
       {
         title: "Manual Sync",
-        description: "If enabled, each photo can be compared and selected manually.",
+        description: "Compare and select each photo manually before syncing.",
         target: "manual_sync",
         value: false,
         onChange: disableOtherOptionsOnChange("manual_sync"),
       },
       {
         title: "Overwrite existing images",
-        description: "If enabled, existing contact images will be overwritten.",
+        description: "Replace existing contact images with WhatsApp photos.",
         target: "overwrite_photos",
         value: false,
         onChange: disableOtherOptionsOnChange("overwrite_photos"),
@@ -49,51 +49,37 @@ export default defineComponent({
 </script>
 
 <template>
-  <div id="home" class="hero h-full bg-base-200">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">Sync Options</h1>
+  <div class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="max-w-lg w-full bg-base-100 rounded-xl shadow-sm border border-base-300 p-6">
+      <h1 class="text-2xl font-semibold tracking-tight text-base-content">
+        Sync Options
+      </h1>
+      <p class="mt-2 text-sm text-base-content/60 leading-relaxed">
+        Configure how your contacts will be synced.
+      </p>
 
-        <div class="form-control pt-6 flex flex-col">
-          <label
-            v-for="option in options"
-            :key="option.target"
-            class="label cursor-pointer mb-2 justify-between"
-          >
-            <div class="flex">
-              <span class="pr-1">{{ option.title }}</span>
-              <span class="tooltip" :data-tip="option.description">
-                <!-- Src: https://heroicons.com/ -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-6 h-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-                  /></svg
-              ></span>
-            </div>
-            <input
-              type="checkbox"
-              v-model="option.value"
-              class="toggle toggle-primary"
-              :onChange="option.onChange?.(options)"
-            />
-          </label>
-
-          <div class="pt-6">
-            <button class="btn btn-primary px-8" @click="startSync()">
-              Start Sync
-            </button>
+      <div class="mt-6 divide-y divide-base-200">
+        <label
+          v-for="option in options"
+          :key="option.target"
+          class="flex items-center justify-between py-4 cursor-pointer"
+        >
+          <div class="pr-4">
+            <div class="text-sm font-medium text-base-content">{{ option.title }}</div>
+            <div class="text-xs text-base-content/50 mt-0.5">{{ option.description }}</div>
           </div>
-        </div>
+          <input
+            type="checkbox"
+            v-model="option.value"
+            class="toggle toggle-sm toggle-primary"
+            :onChange="option.onChange?.(options)"
+          />
+        </label>
       </div>
+
+      <button class="btn btn-primary w-full mt-6" @click="startSync()">
+        Start Sync
+      </button>
     </div>
   </div>
 </template>

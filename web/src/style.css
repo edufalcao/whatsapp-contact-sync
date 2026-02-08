@@ -1,36 +1,96 @@
 #app {
-  height: 100%;
+  min-height: 100%;
   width: 100%;
-  text-align: center;
 }
 
-#header {
-  text-align: left;
-}
-
-p > a {
+/* Links */
+a:not(.btn) {
   font-weight: 500;
-  color: #535bf2;
-  text-decoration: inherit;
+  color: oklch(0.55 0.15 250);
+  text-decoration: none;
+  transition: color 0.15s ease;
 }
-p > a:hover {
-  color: #422ad5;
+a:not(.btn):hover {
+  color: oklch(0.45 0.18 250);
 }
 
+/* QR Code */
 .qr-code {
-  border-width: 10px;
-  border-style: solid;
-  border-color: white;
-  border-radius: 8px;
+  border: 8px solid white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
 .qr-placeholder {
-  border: solid;
-  border-color: black;
-  border-radius: 8px;
-  border-width: 1px;
+  border: 1px dashed oklch(0.8 0 0);
+  border-radius: 12px;
+  background: oklch(0.97 0 0);
 }
 
 .center-spinner {
-  margin: 0px auto;
+  margin: 0 auto;
+}
+
+/* Page transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* Fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide-up transition */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* Avatar pop-in animation */
+@keyframes avatar-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.avatar-pop-in {
+  animation: avatar-pop-in 0.3s ease-out;
+}
+
+/* Smooth progress bar */
+.progress-animated::-webkit-progress-value {
+  transition: width 0.4s ease;
+}
+.progress-animated::-moz-progress-bar {
+  transition: width 0.4s ease;
 }

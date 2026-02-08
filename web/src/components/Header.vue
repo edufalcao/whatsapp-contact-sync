@@ -9,27 +9,18 @@ export default defineComponent({
 </script>
 
 <template>
-  <div id="header" class="navbar bg-base-100">
-    <div class="flex-1">
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-base-100/80 border-b border-base-300">
+    <div class="max-w-3xl mx-auto flex items-center justify-between h-14 px-4">
       <router-link
         to="/"
         tag="button"
-        class="btn btn-ghost normal-case text-xl pl-0 md:pl-4"
-        ><img class="h-8 w-8 mr-" src="/logo.png" />WhatsApp Contact
-        Sync</router-link
+        class="flex items-center gap-2 text-sm font-semibold text-base-content hover:opacity-80 transition-opacity"
       >
+        <img class="h-6 w-6" src="/logo.png" alt="Logo" />
+        PicSync
+      </router-link>
     </div>
-    <div class="flex-none md:pr-4">
-      <iframe
-        src="https://ghbtns.com/github-btn.html?user=guyzyl&repo=whatsapp-contact-sync&type=star&count=true&size=large"
-        frameborder="0"
-        scrolling="0"
-        width="140"
-        height="30"
-        title="GitHub"
-      ></iframe>
-    </div>
-  </div>
+  </header>
 </template>
 
 <style scoped></style>

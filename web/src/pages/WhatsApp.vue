@@ -41,43 +41,50 @@ export default defineComponent({
 </script>
 
 <template>
-  <div id="home" class="hero h-full bg-base-200">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">Authorize WhatsApp</h1>
-        <p class="py-6">
-          Scan the QR code below to authorize access to your WhatsApp account.
-          <a href="https://faq.whatsapp.com/539218963354346/?locale=en_US"
-            >Click here</a
-          >
-          for help.
-          <br />
-          <b>Authorization will take a few seconds after QR code is scanned.</b>
-        </p>
-        <div class="qr-placeholder inline-flex w-72 h-72" v-if="!qrData">
-          <button class="center-spinner loading loading-spinner"></button>
-        </div>
-        <div class="relative z-0">
-          <qrcode-vue
-            class="inline-flex qr-code"
-            v-if="qrData"
-            :value="qrData"
-            :size="288"
-            :foreground="waCon ? qrColorGray : qrColorBlack"
-          ></qrcode-vue>
+  <div class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="max-w-lg w-full bg-base-100 rounded-xl shadow-sm border border-base-300 p-6">
+      <h1 class="text-2xl font-semibold tracking-tight text-base-content">
+        Authorize WhatsApp
+      </h1>
+      <p class="mt-2 text-sm text-base-content/60 leading-relaxed">
+        Scan the QR code below with your WhatsApp app.
+        <a href="https://faq.whatsapp.com/539218963354346/?locale=en_US">Need help?</a>
+      </p>
+
+      <div class="flex justify-center mt-6">
+        <Transition name="fade" mode="out-in">
           <div
-            class="absolute inset-0 flex justify-center items-center z-10"
-            v-if="waCon"
+            v-if="!qrData"
+            class="qr-placeholder inline-flex items-center justify-center w-72 h-72"
           >
-            <div class="grid">
-              <div
-                class="center-spinner loading loading-spinner inline-flex"
-              ></div>
-              <p>WhatsApp Authorizing</p>
-            </div>
+            <span class="loading loading-spinner loading-lg text-base-content/30"></span>
           </div>
-        </div>
+
+          <div v-else class="relative">
+            <qrcode-vue
+              class="qr-code"
+              :value="qrData"
+              :size="288"
+              :foreground="waCon ? qrColorGray : qrColorBlack"
+            />
+            <Transition name="fade">
+              <div
+                v-if="waCon"
+                class="absolute inset-0 flex items-center justify-center rounded-xl backdrop-blur-sm bg-base-100/60"
+              >
+                <div class="flex flex-col items-center gap-2">
+                  <span class="loading loading-spinner loading-md"></span>
+                  <span class="text-sm font-medium text-base-content/70">Connecting...</span>
+                </div>
+              </div>
+            </Transition>
+          </div>
+        </Transition>
       </div>
+
+      <p class="mt-4 text-xs text-base-content/40 text-center">
+        Authorization may take a few seconds after scanning.
+      </p>
     </div>
   </div>
 </template>
