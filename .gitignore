@@ -132,6 +132,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Vite cache
+.vite/
+
 # additional
 token.json
 credentials.json
