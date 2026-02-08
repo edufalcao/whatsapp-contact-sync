@@ -1,56 +1,54 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { event } from "vue-gtag";
 
-export default defineComponent({
-  data: () => ({
-    email: "",
-    checkingPurchase: false,
-    defaultError: "Failed to verify purchase.",
-    waValidationError: "Purchase is valid for a single WhatsApp device only.",
-    errorMessage: null as string | null,
-  }),
+const router = useRouter();
+const route = useRoute();
 
-  mounted() {
-    if (this.$route.query.show_error) {
-      this.errorMessage = this.waValidationError;
-      event("contribution_error_shown", { method: "Google" });
-    }
-  },
+const email = ref("");
+const checkingPurchase = ref(false);
+const defaultError = "Failed to verify purchase.";
+const waValidationError = "Purchase is valid for a single WhatsApp device only.";
+const errorMessage = ref<string | null>(null);
 
-  methods: {
-    coffeeClicked() {
-      this.errorMessage = null;
-      event("contribution_wa_validation_failed", { method: "Google" });
-    },
+function coffeeClicked() {
+  errorMessage.value = null;
+  event("contribution_wa_validation_failed", { method: "Google" });
+}
 
-    checkPurchase() {
-      if (!this.email) return;
-      this.checkingPurchase = true;
+function checkPurchase() {
+  if (!email.value) return;
+  checkingPurchase.value = true;
 
-      fetch("/api/check_purchase", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: this.email }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.purchased) {
-            this.$router.push("/whatsapp");
-          } else {
-            this.errorMessage = this.defaultError;
-            this.checkingPurchase = false;
-            event("contribution_validation_failed", { method: "Google" });
-          }
-        });
-    },
-  },
+  fetch("/api/check_purchase", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email.value }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.purchased) {
+        router.push("/whatsapp");
+      } else {
+        errorMessage.value = defaultError;
+        checkingPurchase.value = false;
+        event("contribution_validation_failed", { method: "Google" });
+      }
+    });
+}
+
+onMounted(() => {
+  if (route.query.show_error) {
+    errorMessage.value = waValidationError;
+    event("contribution_error_shown", { method: "Google" });
+  }
 });
 </script>
 
 <template>
   <div class="flex-1 flex items-center justify-center px-4 py-12">
-    <div class="max-w-lg w-full bg-base-100 rounded-xl shadow-sm border border-base-300 p-6">
+    <div class="max-w-lg w-full bg-base-100 rounded-2xl border border-white/[0.06] shadow-xl shadow-black/20 p-8">
       <h1 class="text-2xl font-semibold tracking-tight text-base-content">
         Servers Are Expensive
       </h1>
@@ -65,11 +63,11 @@ export default defineComponent({
       <div class="mt-6 space-y-5">
         <!-- Step 1 -->
         <div class="flex gap-3">
-          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center">1</div>
+          <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs font-semibold flex items-center justify-center">1</div>
           <div>
             <div class="text-sm font-medium text-base-content mb-2">Contribute ($1)</div>
             <div @click="coffeeClicked">
-              <button class="btn btn-sm btn-outline">
+              <button class="btn btn-sm btn-outline border-white/[0.06] hover:border-primary/30">
                 Contribute
               </button>
             </div>
@@ -78,10 +76,10 @@ export default defineComponent({
 
         <!-- Step 2 -->
         <div class="flex gap-3">
-          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center">2</div>
+          <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs font-semibold flex items-center justify-center">2</div>
           <div class="flex-1">
             <div class="text-sm font-medium text-base-content mb-2">Enter your email</div>
-            <label class="input input-sm input-bordered flex items-center gap-2 w-full max-w-xs">
+            <label class="input input-sm flex items-center gap-2 w-full max-w-xs border-white/[0.06] bg-base-200/30 hover:border-primary/30 focus-within:border-primary/50 transition-colors duration-200">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-50">
                 <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
                 <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
@@ -112,7 +110,7 @@ export default defineComponent({
 
         <!-- Step 3 -->
         <div class="flex gap-3">
-          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center">3</div>
+          <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs font-semibold flex items-center justify-center">3</div>
           <div class="flex-1">
             <button
               @click="checkPurchase()"

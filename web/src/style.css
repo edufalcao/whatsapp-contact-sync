@@ -6,35 +6,68 @@
 /* Links */
 a:not(.btn) {
   font-weight: 500;
-  color: oklch(0.55 0.15 250);
+  color: oklch(0.69 0.17 162);
   text-decoration: none;
-  transition: color 0.15s ease;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 a:not(.btn):hover {
-  color: oklch(0.45 0.18 250);
+  color: oklch(0.75 0.17 162);
+  text-shadow: 0 0 12px oklch(0.69 0.17 162 / 0.3);
 }
 
 /* QR Code */
 .qr-code {
-  border: 8px solid white;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  border: 6px solid oklch(0.25 0.015 260);
+  border-radius: 16px;
+  box-shadow: 0 0 24px oklch(0.69 0.17 162 / 0.15);
 }
 
 .qr-placeholder {
-  border: 1px dashed oklch(0.8 0 0);
-  border-radius: 12px;
-  background: oklch(0.97 0 0);
+  border: 1px dashed oklch(0.3 0.01 260);
+  border-radius: 16px;
+  background: oklch(0.14 0.01 260);
+  position: relative;
+  overflow: hidden;
+}
+.qr-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    oklch(0.2 0.01 260 / 0.4) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .center-spinner {
   margin: 0 auto;
 }
 
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, oklch(0.69 0.17 162), oklch(0.75 0.14 145));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effect */
+.glow-primary {
+  box-shadow: 0 0 20px oklch(0.69 0.17 162 / 0.2);
+}
+
 /* Page transitions */
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .page-enter-from {
   opacity: 0;
@@ -48,7 +81,7 @@ a:not(.btn):hover {
 /* Fade transition */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .fade-enter-from,
 .fade-leave-to {
@@ -58,7 +91,7 @@ a:not(.btn):hover {
 /* Slide-up transition */
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .slide-up-enter-from {
   opacity: 0;
@@ -73,10 +106,13 @@ a:not(.btn):hover {
 @keyframes avatar-pop-in {
   0% {
     opacity: 0;
-    transform: scale(0.5);
+    transform: scale(0.4);
   }
-  70% {
-    transform: scale(1.08);
+  60% {
+    transform: scale(1.12);
+  }
+  80% {
+    transform: scale(0.95);
   }
   100% {
     opacity: 1;
@@ -84,7 +120,7 @@ a:not(.btn):hover {
   }
 }
 .avatar-pop-in {
-  animation: avatar-pop-in 0.3s ease-out;
+  animation: avatar-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Smooth progress bar */

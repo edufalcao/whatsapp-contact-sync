@@ -1,47 +1,41 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { enforcePayments } from "../settings";
+
+const route = useRoute();
 
 const steps = ["/contribute", "/whatsapp", "/gauth", "/options", "/sync"];
 
-export default defineComponent({
-  data: () => ({
-    showSteps: false,
-    showContribute: false,
-    currentStep: 0,
-  }),
+const showSteps = ref(false);
+const showContribute = ref(false);
+const currentStep = ref(0);
 
-  mounted() {
-    enforcePayments.then((val) => {
-      this.showContribute = val;
-    });
-  },
+const stepLabels = computed(() => {
+  const labels = [];
+  if (showContribute.value) labels.push("Contribute");
+  labels.push("WhatsApp", "Google", "Sync");
+  return labels;
+});
 
-  computed: {
-    stepLabels(): string[] {
-      const labels = [];
-      if (this.showContribute) labels.push("Contribute");
-      labels.push("WhatsApp", "Google", "Sync");
-      return labels;
-    },
-    adjustedStep(): number {
-      if (this.showContribute) return this.currentStep;
-      return Math.max(0, this.currentStep - 1);
-    },
-  },
+const adjustedStep = computed(() => {
+  if (showContribute.value) return currentStep.value;
+  return Math.max(0, currentStep.value - 1);
+});
 
-  methods: {
-    updateData() {
-      this.showSteps = steps.includes(this.$route.path);
-      this.currentStep = steps.indexOf(this.$route.path);
-    },
-  },
+function updateData() {
+  showSteps.value = steps.includes(route.path);
+  currentStep.value = steps.indexOf(route.path);
+}
 
-  watch: {
-    $route(to, from) {
-      this.updateData();
-    },
-  },
+onMounted(() => {
+  enforcePayments.then((val) => {
+    showContribute.value = val;
+  });
+});
+
+watch(() => route.path, () => {
+  updateData();
 });
 </script>
 
@@ -52,10 +46,10 @@ export default defineComponent({
       <template v-for="(label, index) in stepLabels" :key="label">
         <div class="flex flex-col items-center gap-1">
           <div
-            class="w-2.5 h-2.5 rounded-full transition-all duration-300"
+            class="w-3 h-3 rounded-full transition-all duration-300"
             :class="index <= adjustedStep
-              ? 'bg-primary scale-110'
-              : 'bg-base-300'"
+              ? 'bg-primary shadow-[0_0_8px] shadow-primary/50'
+              : 'bg-neutral/50 border border-white/[0.06]'"
           ></div>
           <span
             class="text-[10px] transition-colors duration-300"
@@ -66,8 +60,8 @@ export default defineComponent({
         </div>
         <div
           v-if="index < stepLabels.length - 1"
-          class="h-px w-10 mb-4 transition-colors duration-300"
-          :class="index < adjustedStep ? 'bg-primary' : 'bg-base-300'"
+          class="h-px w-12 mb-4 transition-colors duration-300"
+          :class="index < adjustedStep ? 'bg-primary' : 'bg-white/[0.06]'"
         ></div>
       </template>
     </div>

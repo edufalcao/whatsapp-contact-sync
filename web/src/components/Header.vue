@@ -1,22 +1,16 @@
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  data: () => ({}),
-  mounted() {},
-  methods: {},
-});
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-base-100/80 border-b border-base-300">
-    <div class="max-w-3xl mx-auto flex items-center justify-between h-14 px-4">
+  <header class="sticky top-0 z-50 backdrop-blur-xl bg-base-100/60 border-b border-white/[0.06] shadow-lg shadow-black/5">
+    <div class="max-w-3xl mx-auto flex items-center justify-between h-16 px-6">
       <router-link
         to="/"
         tag="button"
-        class="flex items-center gap-2 text-sm font-semibold text-base-content hover:opacity-80 transition-opacity"
+        class="flex items-center gap-2.5 text-sm font-semibold text-base-content hover:text-primary transition-colors duration-200"
       >
-        <img class="h-6 w-6" src="/logo.png" alt="Logo" />
+        <div class="relative">
+          <img class="relative h-7 w-7" src="/logo.png" alt="Logo" />
+        </div>
         PicSync
       </router-link>
     </div>
