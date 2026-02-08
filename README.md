@@ -67,4 +67,4 @@ docker build -t picsync-web -f web/Dockerfile .
 
 ## Acknowledgments
 
-This project was forked from [WhatsApp Contact Sync](https://github.com/guyzyl/whatsapp-contact-sync) by [Guy Zylberberg](https://github.com/guyzyl) and renamed to PicSync. The original idea and concept belong entirely to the original author. This fork is maintained for personal use only — it is not intended for profit and will never be publicly hosted.
+This project is a fork of [WhatsApp Contact Sync](https://github.com/guyzyl/whatsapp-contact-sync) by [Guy Zylberberg](https://github.com/guyzyl) and renamed to PicSync. The original idea and core implementation belong to the original author. It is not intended for commercial use and will never be distributed.
