@@ -20,6 +20,10 @@ async function loadConfig() {
   const data = await res.json();
   CLIENT_ID.value = data.clientId;
   API_KEY.value = data.apiKey;
+  if (!data.clientId) {
+    console.error("Google Client ID not configured on the server.");
+    return;
+  }
   configLoaded.value = true;
   tryInit();
 }
@@ -108,7 +112,7 @@ onMounted(() => {
       <div class="mt-6">
         <button
           @click="handleAuthClick"
-          :disabled="!configLoaded || !gapiLoaded || !gisLoaded"
+          :disabled="!tokenClient || !gapiLoaded"
           id="signin-button"
           class="btn btn-outline border-white/[0.06] bg-base-100/50 hover:bg-base-300 hover:border-primary/30 backdrop-blur-sm gap-3 w-full h-12 transition-all duration-200"
         >
